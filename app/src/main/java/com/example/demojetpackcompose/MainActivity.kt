@@ -1,5 +1,6 @@
 package com.example.demojetpackcompose
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
@@ -32,17 +34,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.demojetpackcompose.ui.theme.DemoJetpackComposeTheme
+import java.io.File
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,11 +60,13 @@ class MainActivity : ComponentActivity() {
 
             DemoJetpackComposeTheme(darkTheme = isDark) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
-                    SimpleToggle {
-                        isDark = it
-                    }
-                    NormalColumn()
+                    Column {
+                        SimpleToggle {
+                            isDark = it
+                        }
+                        NormalColumn()
 //                    LazyColumnExample()
+                    }
                 }
             }
         }
@@ -75,6 +83,7 @@ fun NormalColumn() {
         SimpleTextView()
         SimpleButton()
         SimpleTextField()
+        OutlineTextField(Modifier.padding(16.dp))
         SimpleImage()
         SimpleCheckbox()
         SimpleRadioGroup()
@@ -90,6 +99,7 @@ fun GreetingPreview() {
         SimpleTextView()
         SimpleButton()
         SimpleTextField()
+        OutlineTextField()
         SimpleImage()
         SimpleCheckbox()
     }
@@ -128,14 +138,46 @@ fun SimpleTextField() {
 }
 
 @Composable
-fun SimpleImage() {
-    Image(
-        painter = painterResource(id = R.drawable.ic_launcher_background),
-        contentDescription = "Sample Image",
-        modifier = Modifier
-            .size(150.dp)
-            .clip(MaterialTheme.shapes.medium)
+fun OutlineTextField(modifier: Modifier = Modifier) {
+    OutlinedTextField("",
+        label = { Text("Enter your name") }, onValueChange = {}, modifier = modifier
     )
+}
+
+@Composable
+fun SimpleImage() {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Image(
+            painter = painterResource(id = R.drawable.images),
+            contentDescription = "Sample Image",
+            modifier = Modifier
+                .clip(MaterialTheme.shapes.medium)
+                .align(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+fun SimpleImageLocal(filePath: String) {
+    val imageBitmap by produceState<ImageBitmap?>(initialValue = null, filePath) {
+        val file = File(filePath)
+        if (file.exists()) {
+            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+            value = bitmap.asImageBitmap()
+        }
+    }
+
+    imageBitmap?.let {
+        Image(
+            bitmap = it,
+            contentDescription = "Sample Image",
+            modifier = Modifier
+                .size(150.dp)
+                .clip(MaterialTheme.shapes.medium)
+        )
+    }
+
+    Button(onClick = {}) { }
 }
 
 @Composable

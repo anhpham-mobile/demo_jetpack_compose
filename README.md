@@ -189,13 +189,12 @@ fun Counter(viewModel: CounterViewModel = viewModel()) {
         }
     }
 }
-
 ```
 
-###Choosing the appropriate state management approach depends on the complexity and scope of the state:​
+###Choosing the appropriate state management approach depends on the complexity and scope of the state:
 
-- `In-Composable State`: Suitable for simple, ephemeral state confined to a specific composable.​
+- `In-Composable State`: Suitable for simple, ephemeral state confined to a specific composable.
 
-- `State Holder`: Ideal for managing more complex state or when multiple composables need to share state without involving the broader app architecture.​
+- `State Holder`: Ideal for managing more complex state or when multiple composables need to share state without involving the broader app architecture.
 
-- `ViewModel`: Best for app-wide state management, especially when state needs to persist across configuration changes and align with the MVVM architecture.​
+- `ViewModel`: Best for app-wide state management, especially when state needs to persist across configuration changes and align with the MVVM architecture.
