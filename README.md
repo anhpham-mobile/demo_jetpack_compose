@@ -191,7 +191,7 @@ fun Counter(viewModel: CounterViewModel = viewModel()) {
 }
 ```
 
-###Choosing the appropriate state management approach depends on the complexity and scope of the state:
+### Choosing the appropriate state management approach depends on the complexity and scope of the state:
 
 - `In-Composable State`: Suitable for simple, ephemeral state confined to a specific composable.
 
